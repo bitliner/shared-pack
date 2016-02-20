@@ -1,5 +1,8 @@
 # shared-pack
-Easily share code between angular.js and node.js.
+
+Compiler to easily share code between angular.js and node.js.
+
+<img src="./docs/usage.gif"/>
 
 
 # Index
