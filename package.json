@@ -2,7 +2,7 @@
   "name": "shared-pack",
   "version": "1.0.3",
   "description": "",
-  "main": "shared-pack.js",
+  "main": "shared-pack",
   "bin": {
     "shared-pack": "./bin/shared-pack.js"
   },
