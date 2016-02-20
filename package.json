@@ -4,7 +4,7 @@
   "description": "",
   "main": "shared-pack",
   "bin": {
-    "shared-pack": "./bin/shared-pack.js"
+    "shared-pack": "./bin/shared-pack"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
