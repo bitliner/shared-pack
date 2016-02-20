@@ -1,11 +1,11 @@
 {
   "name": "compile-for-node-and-angular",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "shared-pack.js",
-  "bin":{
-    "shared-pack":"./bin/shared-pack.js"
-    },
+  "bin": {
+    "shared-pack": "./bin/shared-pack.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
