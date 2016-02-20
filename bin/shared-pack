@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+
+'use strict';
+
+var SharedPack=require('../');
+
+SharedPack.run({
+	filename:process.argv[2]
+}, function(err){
+	if (err){
+		console.log('Error', err);
+		return;
+	}
+	console.log('Game over!');
+});
+

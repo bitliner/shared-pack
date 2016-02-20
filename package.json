@@ -2,13 +2,17 @@
   "name": "compile-for-node-and-angular",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "shared-pack.js",
+  "bin":{
+    "shared-pack":"./bin/shared-pack.js"
+    },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async": "^1.5.2",
     "ejs": "^2.4.1"
   }
 }
