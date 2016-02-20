@@ -45,7 +45,9 @@ Easily share code between angular.js and node.js.
 <a name="compile"></a>
 ## Compile
 
-`shared-pack ./shared-service.js`
+```
+shared-pack ./shared-service.js
+```
 
 <a name="result"></a>
 ### Results
