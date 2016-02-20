@@ -1,6 +1,6 @@
 {
   "name": "compile-for-node-and-angular",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "shared-pack.js",
   "bin": {
