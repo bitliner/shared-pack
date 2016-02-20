@@ -32,6 +32,13 @@ Compiler to easily share code between angular.js and node.js.
 <a name="createModule"></a>
 ## Create a javascript module
 
+The module should satisfy the following 2 conditions:
+
+1. it should be exposed as node.js module - using `module.exports`
+2. the function to expose should be the angular.js function - with dependencies declared as parameters of the function
+
+### Example
+
 1. crete folder: `mkdir shared-module && cd $_`
 2. initialize bower.json and package.json `bower init && npm init`
 3. create module, example `shared-service.js`:
