@@ -25,8 +25,6 @@ Easily share code between angular.js and node.js.
 1. [Create a node.js module](#createModule)
 2. [Compile](#compile)
 3. [Configure properly package.json and bower.json](#setMain)
-2. 
-3.
 
 <a name="createModule"></a>
 ## Create a javascript module
