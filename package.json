@@ -1,6 +1,6 @@
 {
   "name": "shared-pack",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "shared-pack.js",
   "bin": {
