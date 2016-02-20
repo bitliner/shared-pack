@@ -3,6 +3,7 @@
 'use strict';
 
 var SharedPack=require('../');
+var Logger=new (require('grunt-legacy-log').Log)();
 
 SharedPack.run({
 	filename:process.argv[2]
@@ -11,6 +12,7 @@ SharedPack.run({
 		console.log('Error', err);
 		return;
 	}
-	console.log('Game over!');
+
+	Logger.ok('Finished!');
 });
 
