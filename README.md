@@ -24,8 +24,8 @@ Easily share code between angular.js and node.js.
 
 ## Create a javascript module
 
-1. crete folder: `mkdir shared-module && $_`
-2. initialize bower.sjon and package.json `bower init && npm init`
+1. crete folder: `mkdir shared-module && cd $_`
+2. initialize bower.json and package.json `bower init && npm init`
 3. create module, example `shared-service.js`:
  	```
  	'use strict';
