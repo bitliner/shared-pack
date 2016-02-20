@@ -97,5 +97,9 @@ The results fo compilation will be a foldr `./build` containing 2 files
 	...
 ```
 
+# Roadmap
+
+1. Add support for private npm packages
+
 
 
