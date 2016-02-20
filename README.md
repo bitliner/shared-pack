@@ -66,9 +66,24 @@ The results fo compilation will be a foldr `./build` containing 2 files
 
 	 module.exports = SharedService(require('param1.js'));
 	```
-	
+
 ## Set properly `main` field in bower.json and package.json
 
+*bower.json*
+
+```
+	...
+	"main":"./build/shared-service.angular.js",
+	...
+```
+
+*package.json*
+
+```
+	...
+	"main":"./build/shared-service.node.js",
+	...
+```
 
 
 
