@@ -22,6 +22,13 @@ Easily share code between angular.js and node.js.
 <a name="usage"></a>
 # Usage
 
+1. [Create a node.js module](#createModule)
+2. [Compile](#compile)
+3. [Configure properly package.json and bower.json](#setMain)
+2. 
+3.
+
+<a name="createModule"></a>
 ## Create a javascript module
 
 1. crete folder: `mkdir shared-module && cd $_`
@@ -37,12 +44,13 @@ Easily share code between angular.js and node.js.
 	module.exports = SharedService;
  	``` 
 
-
+<a name="compile"></a>
 ## Compile
 
 `shared-pack ./shared-service.js`
 
-## Results
+<a name="result"></a>
+### Results
 
 The results fo compilation will be a foldr `./build` containing 2 files
 
@@ -67,7 +75,8 @@ The results fo compilation will be a foldr `./build` containing 2 files
 	 module.exports = SharedService(require('param1.js'));
 	```
 
-## Set properly `main` field in bower.json and package.json
+<a name="setMain"></a>
+## Configure properly `main` field in bower.json and package.json
 
 *bower.json*
 
