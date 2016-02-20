@@ -3,7 +3,9 @@
 var ejs = require('ejs');
 var fs = require('fs');
 var async = require('async');
-var path=require('path');
+var path = require('path');
+var Logger = new(require('grunt-legacy-log').Log)();
+
 
 
 var angularTemplateString = fs.readFileSync(path.resolve(__dirname, './templates/angular-template.ejs'), {
@@ -35,7 +37,7 @@ function generateFiles(opts, cb) {
 	packageName = opts.packageName;
 	nodeTemplateCompiled = opts.nodeTemplateCompiled;
 	angularTemplateCompiled = opts.angularTemplateCompiled;
-	buildFolder=path.resolve(process.cwd(), 'build');
+	buildFolder = path.resolve(process.cwd(), 'build');
 
 	async.waterfall([
 		function(next) {
@@ -47,13 +49,18 @@ function generateFiles(opts, cb) {
 			if (isFolderExisting) {
 				return next();
 			}
+			Logger.writeln('Creating folder: ' + buildFolder);
 			return fs.mkdir(buildFolder, next);
 		},
 		function(next) {
-			fs.writeFile(buildFolder + '/'+packageName + '.angular.js', angularTemplateCompiled, 'utf8', next);
+			var filename = buildFolder + '/' + packageName + '.angular.js';
+			Logger.writeln('Creating file: ' + filename);
+			fs.writeFile(filename, angularTemplateCompiled, 'utf8', next);
 		},
 		function(next) {
-			fs.writeFile(buildFolder + '/'+packageName + '.node.js', nodeTemplateCompiled, 'utf8', next);
+			var filename = buildFolder + '/' + packageName + '.node.js';
+			Logger.writeln('Creating file: ' + filename);
+			fs.writeFile(filename, nodeTemplateCompiled, 'utf8', next);
 		}
 	], function(err) {
 		cb(err);
@@ -78,6 +85,7 @@ module.exports.run = function(opts, cb) {
 	var moduleToCompile;
 	var moduleName;
 	var deps;
+	var constructorName;
 	var packageName;
 
 	opts = opts || {};
@@ -85,13 +93,14 @@ module.exports.run = function(opts, cb) {
 
 	moduleName = filename;
 	packageName = moduleName.replace(/^\.\//gi, '').split('.js')[0];
-	filename=path.resolve(process.cwd(), filename);
+	filename = path.resolve(process.cwd(), filename);
 	moduleToCompile = require(filename);
 	deps = getParamNames(moduleToCompile);
+	constructorName=moduleToCompile.prototype.constructor.name;
 
 	angularTemplateCompiled = ejs.render(angularTemplateString, {
 		package: {
-			name: 'SharedService',
+			name: constructorName,
 			deps: deps.map(function(dep) {
 				return '\'' + dep + '\'';
 			}).toString(),
@@ -104,7 +113,7 @@ module.exports.run = function(opts, cb) {
 	});
 	nodeTemplateCompiled = ejs.render(nodeTemplateString, {
 		package: {
-			name: 'SharedService',
+			name: constructorName,
 			deps: deps
 				.map(function(dep) {
 					return dep + '.js';
