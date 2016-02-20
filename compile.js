@@ -9,6 +9,7 @@ var angularTemplateCompiled;
 
 var moduleToCompile;
 var moduleName;
+var deps;
 
 var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 var ARGUMENT_NAMES = /([^\s,]+)/g;
@@ -23,7 +24,11 @@ function getParamNames(func) {
 
 moduleName = process.argv[2];
 moduleToCompile = require(moduleName);
-console.log('Fn parameters/deps are:', getParamNames(moduleToCompile));
+deps = getParamNames(moduleToCompile);
+deps = deps.map(function(dep) {
+	return '\'' + dep + '\'';
+});
+console.log('Fn parameters/deps are:', deps);
 
 console.log('angularTemplateString', angularTemplateString);
 console.log('Array to string', [1, 2].toString());
@@ -31,12 +36,14 @@ console.log('Array to string', [1, 2].toString());
 angularTemplateCompiled = ejs.render(angularTemplateString, {
 	package: {
 		name: 'SharedService',
-		deps: ['\'service1\''].toString()
+		deps: deps.toString(),
+		code: moduleToCompile.toString()
 	}
-},{
-		escape: function(html) {
-			return String(html);
-		}
+}, {
+	escape: function(html) {
+		return String(html);
+	}
 });
 
-console.log('angularTemplateCompiled', angularTemplateCompiled);
+console.log('angularTemplateCompiled');
+console.log(angularTemplateCompiled);
