@@ -78,7 +78,7 @@ The results fo compilation will be a foldr `./build` containing 2 files
 <a name="setMain"></a>
 ## Configure properly `main` field in bower.json and package.json
 
-*bower.json*
+**bower.json**
 
 ```
 	...
@@ -86,7 +86,7 @@ The results fo compilation will be a foldr `./build` containing 2 files
 	...
 ```
 
-*package.json*
+**package.json**
 
 ```
 	...
