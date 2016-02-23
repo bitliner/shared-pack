@@ -34,3 +34,4 @@ node_modules
 
 # examples
 examples/build
+build/
