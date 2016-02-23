@@ -1,4 +1,4 @@
 <%= package.code %>
 
 angular.module('<%= package.name %>', [<%= package.deps %>])
-	.factory('<%= package.name %>', [<%= package.deps %>, <%= package.name %>]);
+	.factory('<%= package.name %>', [<%= package.deps %><% if (package.deps && package.deps.length) { %> , <% } %><%= package.name %>]);

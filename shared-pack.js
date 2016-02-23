@@ -18,6 +18,7 @@ var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 var ARGUMENT_NAMES = /([^\s,]+)/g;
 
 function getParamNames(func) {
+	console.log(func.toString());
 	var fnStr = func.toString().replace(STRIP_COMMENTS, '');
 	var result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
 	if (result === null)
@@ -25,15 +26,15 @@ function getParamNames(func) {
 	return result;
 }
 
-function getMethods(obj) {
+function getMethods(obj, constructorName) {
 	var result = [];
 	for (var id in obj) {
 		try {
-			if (typeof(obj[id]) == "function") {
-				result.push('var ' + id + " = " + obj[id].toString() + ';');
+			if (typeof(obj[id]) == 'function') {
+				result.push(constructorName + '.' + id + ' = ' + obj[id].toString() + ';');
 			}
 		} catch (err) {
-			result.push(id + ": inaccessible");
+			result.push(id + ': inaccessible');
 		}
 	}
 	return result;
@@ -103,7 +104,7 @@ module.exports.run = function(opts, cb) {
 	deps            = getParamNames(moduleToCompile);
 	constructorName = moduleToCompile.prototype.constructor.name;
 
-	var methods = getMethods(moduleToCompile.prototype);
+	var methods = getMethods(moduleToCompile.prototype, constructorName);
 
 	angularTemplateCompiled = ejs.render(angularTemplateString, {
 		package: {

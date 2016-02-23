@@ -1,28 +1,28 @@
 function DataSourceFilter() {}
 
-var isCallCenterChannel = function (channel) {
+DataSourceFilter.isCallCenterChannel = function (channel) {
 	if (!channel){
 		return null;
 	}
 	return channel.match(/call\-center$/gi);
 };
 
-var getRegexToMatchStringNotEndingInCallCenter = function () {
+DataSourceFilter.getRegexToMatchStringNotEndingInCallCenter = function () {
 	return /^((?!call.center).)*$/gi;
 };
 
-var getRegexToMatchStringEndingInCallCenter = function () {
+DataSourceFilter.getRegexToMatchStringEndingInCallCenter = function () {
 	return /call\-center$/gi;	
 };
 
-var _getCallCenterDataFilteringCallback = function () {
+DataSourceFilter._getCallCenterDataFilteringCallback = function () {
 	var self = this;
 	return function(review){
 		return review.review && review.review.channel && self.isCallCenterChannel(review.review.channel);
 	};
 };
 
-var getFilteringCallback = function (enabledDataSources) {
+DataSourceFilter.getFilteringCallback = function (enabledDataSources) {
 	if (enabledDataSources.indexOf('call-center')>=0){
 		return this._getCallCenterDataFilteringCallback();
 	}
