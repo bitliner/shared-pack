@@ -2,8 +2,8 @@
 
 'use strict';
 
-var SharedPack=require('../');
-var Logger=new (require('grunt-legacy-log').Log)();
+var SharedPack = require('../');
+var Logger     = new (require('grunt-legacy-log').Log)();
 
 SharedPack.run({
 	filename:process.argv[2]

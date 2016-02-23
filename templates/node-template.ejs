@@ -1,3 +1,10 @@
-<%= package.code %>
+/* jshint node:true */
+'use strict';
 
- module.exports = <%= package.name %>(<%= package.deps %>);
+function <%= package.name %>(<%= package.depsToString %>) {
+	<%= package.code %>
+
+	return this;
+}
+
+module.exports = new <%= package.name %>(<%= package.deps %>);

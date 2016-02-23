@@ -1,4 +1,10 @@
-<%= package.code %>
+'use strict';
+
+function <%= package.name %>(<%= package.deps %>) {
+	<%= package.code %>
+
+	return this;
+}
 
 angular.module('<%= package.name %>', [<%= package.deps %>])
-	.factory('<%= package.name %>', [<%= package.deps %>, <%= package.name %>]);
+	.factory('<%= package.name %>', [<%= package.depsToString %><% if (package.deps && package.deps.length) { %> , <% } %><%= package.name %>]);
