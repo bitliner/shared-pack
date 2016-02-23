@@ -1,11 +1,13 @@
 /* jshint node:true */
 'use strict';
 
-var ejs    = require('ejs');
-var fs     = require('fs');
-var async  = require('async');
-var path   = require('path');
-var Logger = new(require('grunt-legacy-log').Log)();
+var ejs       = require('ejs');
+var fs        = require('fs');
+var async     = require('async');
+var path      = require('path');
+var Logger    = new(require('grunt-legacy-log').Log)();
+var beautify  = require('js-beautify').js_beautify;
+var paramCase = require('param-case');
 
 var angularTemplateString = fs.readFileSync(path.resolve(__dirname, './templates/angular-template.ejs'), {
 	encoding: 'utf8'
@@ -18,7 +20,6 @@ var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 var ARGUMENT_NAMES = /([^\s,]+)/g;
 
 function getParamNames(func) {
-	console.log(func.toString());
 	var fnStr = func.toString().replace(STRIP_COMMENTS, '');
 	var result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
 	if (result === null)
@@ -31,10 +32,10 @@ function getMethods(obj, constructorName) {
 	for (var id in obj) {
 		try {
 			if (typeof(obj[id]) == 'function') {
-				result.push(constructorName + '.' + id + ' = ' + obj[id].toString() + ';');
+				result.push('this' + '.' + id + ' = ' + obj[id].toString() + ';');
 			}
 		} catch (err) {
-			result.push(id + ': inaccessible');
+			
 		}
 	}
 	return result;
@@ -67,12 +68,12 @@ function generateFiles(opts, cb) {
 		function(next) {
 			var filename = buildFolder + '/' + packageName + '.angular.js';
 			Logger.writeln('Creating file: ' + filename);
-			fs.writeFile(filename, angularTemplateCompiled, 'utf8', next);
+			fs.writeFile(filename, beautify(angularTemplateCompiled, {indent_size: 4}), 'utf8', next);
 		},
 		function(next) {
 			var filename = buildFolder + '/' + packageName + '.node.js';
 			Logger.writeln('Creating file: ' + filename);
-			fs.writeFile(filename, nodeTemplateCompiled, 'utf8', next);
+			fs.writeFile(filename, beautify(nodeTemplateCompiled, {indent_size: 4}), 'utf8', next);
 		}
 	], function(err) {
 		cb(err);
@@ -87,10 +88,11 @@ module.exports.run = function(opts, cb) {
 
 	var moduleToCompile;
 	var moduleName;
-	var deps;
+	var deps, depsToString;
 	var constructorName;
 	var packageName;
 	var split;
+	var methods;
 
 	opts            = opts || {};
 	filename        = opts.filename;
@@ -103,16 +105,17 @@ module.exports.run = function(opts, cb) {
 	moduleToCompile = require(filename);
 	deps            = getParamNames(moduleToCompile);
 	constructorName = moduleToCompile.prototype.constructor.name;
-
-	var methods = getMethods(moduleToCompile.prototype, constructorName);
+	
+	methods         = getMethods(moduleToCompile.prototype, constructorName);
 
 	angularTemplateCompiled = ejs.render(angularTemplateString, {
 		package: {
 			name: constructorName,
-			deps: deps.map(function(dep) {
+			depsToString: deps.map(function(dep) {
 				return '\'' + dep + '\'';
 			}).toString(),
-			code: moduleToCompile.toString() + '\n\n' + methods.join('\n\n')
+			deps: deps,
+			code: methods.join('\n\n')
 		}
 	}, {
 		escape: function(html) {
@@ -123,13 +126,11 @@ module.exports.run = function(opts, cb) {
 	nodeTemplateCompiled = ejs.render(nodeTemplateString, {
 		package: {
 			name: constructorName,
-			deps: deps
-				.map(function(dep) {
-					return dep + '.js';
-				}).map(function(dep) {
-					return 'require(\'' + dep + '\')';
+			deps: deps.map(function(dep) {
+					return 'require(\'' + paramCase(dep) + '\')';
 				}).toString(),
-			code: moduleToCompile.toString() + '\n\n' + methods.join('\n\n')
+			depsToString: deps,
+			code: '\n' + methods.join('\n\n')
 		}
 	}, {
 		escape: function(html) {
