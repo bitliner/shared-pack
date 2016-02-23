@@ -25,6 +25,20 @@ function getParamNames(func) {
 	return result;
 }
 
+function getMethods(obj) {
+	var result = [];
+	for (var id in obj) {
+		try {
+			if (typeof(obj[id]) == "function") {
+				result.push('var ' + id + " = " + obj[id].toString() + ';');
+			}
+		} catch (err) {
+			result.push(id + ": inaccessible");
+		}
+	}
+	return result;
+}
+
 function generateFiles(opts, cb) {
 	var packageName, nodeTemplateCompiled, angularTemplateCompiled;
 	var buildFolder;
@@ -89,19 +103,22 @@ module.exports.run = function(opts, cb) {
 	deps            = getParamNames(moduleToCompile);
 	constructorName = moduleToCompile.prototype.constructor.name;
 
+	var methods = getMethods(moduleToCompile.prototype);
+
 	angularTemplateCompiled = ejs.render(angularTemplateString, {
 		package: {
 			name: constructorName,
 			deps: deps.map(function(dep) {
 				return '\'' + dep + '\'';
 			}).toString(),
-			code: moduleToCompile.toString()
+			code: moduleToCompile.toString() + '\n\n' + methods.join('\n\n')
 		}
 	}, {
 		escape: function(html) {
 			return String(html);
 		}
 	});
+
 	nodeTemplateCompiled = ejs.render(nodeTemplateString, {
 		package: {
 			name: constructorName,
@@ -111,7 +128,7 @@ module.exports.run = function(opts, cb) {
 				}).map(function(dep) {
 					return 'require(\'' + dep + '\')';
 				}).toString(),
-			code: moduleToCompile.toString()
+			code: moduleToCompile.toString() + '\n\n' + methods.join('\n\n')
 		}
 	}, {
 		escape: function(html) {
