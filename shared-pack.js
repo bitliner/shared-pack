@@ -1,12 +1,11 @@
+/* jshint node:true */
 'use strict';
 
-var ejs = require('ejs');
-var fs = require('fs');
-var async = require('async');
-var path = require('path');
+var ejs    = require('ejs');
+var fs     = require('fs');
+var async  = require('async');
+var path   = require('path');
 var Logger = new(require('grunt-legacy-log').Log)();
-
-
 
 var angularTemplateString = fs.readFileSync(path.resolve(__dirname, './templates/angular-template.ejs'), {
 	encoding: 'utf8'
@@ -14,8 +13,6 @@ var angularTemplateString = fs.readFileSync(path.resolve(__dirname, './templates
 var nodeTemplateString = fs.readFileSync(path.resolve(__dirname, './templates/node-template.ejs'), {
 	encoding: 'utf8'
 });
-
-
 
 var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 var ARGUMENT_NAMES = /([^\s,]+)/g;
@@ -32,12 +29,12 @@ function generateFiles(opts, cb) {
 	var packageName, nodeTemplateCompiled, angularTemplateCompiled;
 	var buildFolder;
 
-	opts = opts || {};
-
-	packageName = opts.packageName;
-	nodeTemplateCompiled = opts.nodeTemplateCompiled;
+	opts                    = opts || {};
+	
+	packageName             = opts.packageName;
+	nodeTemplateCompiled    = opts.nodeTemplateCompiled;
 	angularTemplateCompiled = opts.angularTemplateCompiled;
-	buildFolder = path.resolve(process.cwd(), 'build');
+	buildFolder             = path.resolve(process.cwd(), 'build');
 
 	async.waterfall([
 		function(next) {
@@ -67,15 +64,6 @@ function generateFiles(opts, cb) {
 	});
 }
 
-
-
-//console.log('Fn parameters/deps are:', deps);
-
-//console.log('angularTemplateString', angularTemplateString);
-//console.log('Array to string', [1, 2].toString());
-
-
-
 module.exports.run = function(opts, cb) {
 	var filename;
 
@@ -87,16 +75,19 @@ module.exports.run = function(opts, cb) {
 	var deps;
 	var constructorName;
 	var packageName;
+	var split;
 
-	opts = opts || {};
-	filename = opts.filename;
-
-	moduleName = filename;
-	packageName = moduleName.replace(/^\.\//gi, '').split('.js')[0];
-	filename = path.resolve(process.cwd(), filename);
+	opts            = opts || {};
+	filename        = opts.filename;
+	
+	moduleName      = filename;
+	packageName     = moduleName.replace(/^\.\//gi, '').split('.js')[0];
+	split           = packageName.split('/');
+	packageName     = split[split.length - 1];
+	filename        = path.resolve(process.cwd(), filename);
 	moduleToCompile = require(filename);
-	deps = getParamNames(moduleToCompile);
-	constructorName=moduleToCompile.prototype.constructor.name;
+	deps            = getParamNames(moduleToCompile);
+	constructorName = moduleToCompile.prototype.constructor.name;
 
 	angularTemplateCompiled = ejs.render(angularTemplateString, {
 		package: {
@@ -129,18 +120,11 @@ module.exports.run = function(opts, cb) {
 	});
 
 	generateFiles({
-		packageName: packageName,
-		nodeTemplateCompiled: nodeTemplateCompiled,
-		angularTemplateCompiled: angularTemplateCompiled
+		packageName             : packageName,
+		nodeTemplateCompiled    : nodeTemplateCompiled,
+		angularTemplateCompiled : angularTemplateCompiled
 	}, function(err) {
 		cb(err);
 	});
 
-
-
 };
-
-// console.log('angularTemplateCompiled');
-// console.log(angularTemplateCompiled);
-// console.log('nodeTemplateCompiled');
-// console.log(nodeTemplateCompiled);
