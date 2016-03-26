@@ -1,16 +1,15 @@
 'use strict';
 
 var fs = require('fs');
-var path=require('path');
+var path = require('path');
 var expect = require('chai').expect;
 var SharedPack = require('../');
 
 describe('SharedPack', function() {
 
-	describe.only('Implementation', function() {
+	describe('Implementation', function() {
 
 		describe('parseNodeModuleString()', function() {
-
 
 
 			it('should work fine when it is a simple module as input', function() {
@@ -19,15 +18,17 @@ describe('SharedPack', function() {
 
 				// simpleModuleAsString = require().toString();
 				currentOutput = SharedPack.parseNodeModuleString({
-					filename:path.resolve(__dirname,'./data/simple-module.js')
+					filename: path.resolve(__dirname, './data/simple-module.js')
 				});
-				currentOutput.code=currentOutput.code.replace(/((\n)|(\t))+/gi,' ').trim();
+				currentOutput.code = currentOutput.code.replace(/((\n)|(\t))+/gi, ' ').trim();
 
 				expect(currentOutput).to.be.eql({
-					name: 'simple-module',
+					name: 'SharedService',
 					depsToString: '\'param1\'',
 					deps: ['param1'],
-					code: 'function SharedService(param1) { console.log(\'Ola\', param1); }'
+					code: 'function SharedService(param1) { console.log(\'Ola\', param1); }',
+					constructorName: 'SharedService'
+
 				});
 
 
@@ -38,31 +39,39 @@ describe('SharedPack', function() {
 
 	describe('API', function() {
 
+
+
 		describe('Very simple module', function() {
+
 			var rawModule;
 			var expectedAngularModule;
 
 			beforeEach(function() {
 				rawModule = require('./data/simple-module.js');
-				expectedAngularModule = fs.readFileSync('./data/simple-module.angular-expected.js', {
+				expectedAngularModule = fs.readFileSync(path.resolve(__dirname,'./data/simple-module.angular-expected.js'), {
 					encoding: 'utf8'
 				});
 			});
 
-			it('should be compiled corrcetly for angular.js platform', function() {
+			describe('generateAngularModuleFromFilename()', function() {
+				it('should be compiled corrcetly for angular.js platform', function() {
 
-				var rawModuleAsString;
-				var angularModule;
+					// var rawModuleAsString;
+					var angularModule;
 
-				angularModule = SharedPack.generateAngularModuleFromString(rawModuleAsString);
+					angularModule = SharedPack.generateAngularModuleFromFilename(path.resolve(__dirname, './data/simple-module.js'));
 
-				expect(angularModule).to.be.equal(expectedAngularModule);
+					expect(angularModule.replace(/((\n)|(\t))+/gi, ' ').trim()).to.be.equal(expectedAngularModule.replace(/((\n)|(\t))+/gi, ' ').trim());
 
 
 
-				// console.log('rawModule', rawModule.toString());
+					// console.log('rawModule', rawModule.toString());
+
+				});
 
 			});
+
+
 
 		});
 

@@ -84,24 +84,42 @@ function generateFiles(opts, cb) {
 	});
 }
 
-module.exports.generateAngularModuleFromString = function(angularModuleAsString) {
+module.exports.generateAngularModuleFromFilename = function(filename) {
+	var parsedModule;
+	var angularTemplateCompiled;
+
+	parsedModule=parseNodeModuleString({
+		filename:filename
+	});
+
+	angularTemplateCompiled = ejs.render(angularTemplateString, {
+		package: parsedModule
+	}, {
+		escape: function(html) {
+			return String(html);
+		}
+	});
+
+	return angularTemplateCompiled;
+
 
 };
-module.exports.parseNodeModuleString = function(opts) {
+var parseNodeModuleString=module.exports.parseNodeModuleString = function parseNodeModuleString(opts) {
 	// tmp
 	var moduleName;
 	var methods;
-	var constructorName;
 	// input
 	var filename;
 	var moduleToCompile;
 	// output
 	var result;
 	var packageName, depsToString, deps, code;
+	var constructorName;
 
 
 	opts = opts || {};
 	filename = opts.filename || null;
+	//console.log('opts.filename',opts.filename)
 	filename=path.resolve(__dirname, filename);
 
 	// input
@@ -124,10 +142,11 @@ module.exports.parseNodeModuleString = function(opts) {
 
 
 	result = {
-		name: packageName,
+		name: constructorName,
 		depsToString: depsToString,
 		deps: deps,
-		code: code
+		code: code,
+		constructorName:constructorName
 	};
 	return result;
 };
