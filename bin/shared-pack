@@ -3,16 +3,16 @@
 'use strict';
 
 var SharedPack = require('../');
-var Logger     = new (require('grunt-legacy-log').Log)();
+var Logger = new(require('grunt-legacy-log').Log)();
+var path = require('path');
 
 SharedPack.run({
-	filename:process.argv[2]
-}, function(err){
-	if (err){
+	filename: path.resolve(__dirname, process.argv[2])
+}, function(err) {
+	if (err) {
 		console.log('Error', err);
 		return;
 	}
 
 	Logger.ok('Finished!');
 });
-

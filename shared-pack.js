@@ -29,8 +29,8 @@ function getParamNames(func) {
 
 function getMethods(obj, constructorName) {
 
-	return Object.keys(obj).map(function(methodName){
-		return constructorName+'.prototype.'+methodName+' = '+obj[methodName].toString()+';';
+	return Object.keys(obj).map(function(methodName) {
+		return constructorName + '.prototype.' + methodName + ' = ' + obj[methodName].toString() + ';';
 	});
 
 	//return obj.toString();
@@ -94,8 +94,8 @@ module.exports.generateAngularModuleFromFilename = function(filename) {
 	var parsedModule;
 	var angularTemplateCompiled;
 
-	parsedModule=parseNodeModuleString({
-		filename:filename
+	parsedModule = parseNodeModuleString({
+		filename: filename
 	});
 
 	angularTemplateCompiled = ejs.render(angularTemplateString, {
@@ -110,7 +110,7 @@ module.exports.generateAngularModuleFromFilename = function(filename) {
 
 
 };
-var parseNodeModuleString=module.exports.parseNodeModuleString = function parseNodeModuleString(opts) {
+var parseNodeModuleString = module.exports.parseNodeModuleString = function parseNodeModuleString(opts) {
 	// tmp
 	var moduleName;
 	var methods;
@@ -126,24 +126,25 @@ var parseNodeModuleString=module.exports.parseNodeModuleString = function parseN
 	opts = opts || {};
 	filename = opts.filename || null;
 	//console.log('opts.filename',opts.filename)
-	filename=path.resolve(__dirname, filename);
+	filename = path.resolve(__dirname, filename);
 
 	// input
 	moduleName = filename;
 
 	// output
-	packageName=moduleName.split('/');
-	packageName=packageName[packageName.length-1].split('.js')[0];
+	packageName = moduleName.split('/');
+	packageName = packageName[packageName.length - 1].split('.js')[0];
 	//packageName = moduleName.replace(/^\.\//gi, '').split('.js')[0];
-	moduleToCompile=require(filename);
-	constructorName=moduleToCompile.prototype.constructor.name;
+	moduleToCompile = require(filename);
+	constructorName = moduleToCompile.prototype.constructor.name;
 	methods = getMethods(moduleToCompile.prototype, constructorName);
 	//console.log('methods',methods);
-	deps=getParamNames(moduleToCompile);
+	deps = getParamNames(moduleToCompile);
 	depsToString = deps.map(function(dep) {
 		return '\'' + dep + '\'';
 	}).toString();
-	code=moduleToCompile.toString()+'\n\n'+methods.join('\n\n');
+	Logger.info('>>', moduleToCompile.toString());
+	code = moduleToCompile.toString() + '\n\n' + methods.join('\n\n');
 
 
 
@@ -152,7 +153,7 @@ var parseNodeModuleString=module.exports.parseNodeModuleString = function parseN
 		depsToString: depsToString,
 		deps: deps,
 		code: code,
-		constructorName:constructorName
+		constructorName: constructorName
 	};
 	return result;
 };
@@ -163,37 +164,17 @@ module.exports.run = function(opts, cb) {
 	var angularTemplateCompiled;
 	var nodeTemplateCompiled;
 
-	var moduleToCompile;
-	var moduleName;
-	var deps, depsToString;
-	var constructorName;
 	var packageName;
-	var split;
-	var methods;
+	var parsedModule;
 
 	opts = opts || {};
 	filename = opts.filename;
-
-	moduleName = filename;
-	packageName = moduleName.replace(/^\.\//gi, '').split('.js')[0];
-	split = packageName.split('/');
-	packageName = split[split.length - 1];
-	filename = path.resolve(process.cwd(), filename);
-	moduleToCompile = require(filename);
-	deps = getParamNames(moduleToCompile);
-	constructorName = moduleToCompile.prototype.constructor.name;
-
-	methods = getMethods(moduleToCompile.prototype, constructorName);
-
+	//console.log();
+	parsedModule = parseNodeModuleString({
+		filename: filename
+	});
 	angularTemplateCompiled = ejs.render(angularTemplateString, {
-		package: {
-			name: constructorName,
-			depsToString: deps.map(function(dep) {
-				return '\'' + dep + '\'';
-			}).toString(),
-			deps: deps,
-			code: methods.join('\n\n')
-		}
+		package: parsedModule
 	}, {
 		escape: function(html) {
 			return String(html);
@@ -201,14 +182,7 @@ module.exports.run = function(opts, cb) {
 	});
 
 	nodeTemplateCompiled = ejs.render(nodeTemplateString, {
-		package: {
-			name: constructorName,
-			deps: deps.map(function(dep) {
-				return 'require(\'' + paramCase(dep) + '\')';
-			}).toString(),
-			depsToString: deps,
-			code: '\n' + methods.join('\n\n')
-		}
+		package: parseNodeModuleString
 	}, {
 		escape: function(html) {
 			return String(html);

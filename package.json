@@ -7,7 +7,8 @@
     "shared-pack": "./bin/shared-pack"
   },
   "scripts": {
-    "test": "mocha ./test/test.js"
+    "test": "mocha ./test/test.js",
+    "examples":"cd examples"
   },
   "author": "",
   "license": "ISC",
