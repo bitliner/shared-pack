@@ -1,6 +1,6 @@
 {
   "name": "shared-pack",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "",
   "main": "shared-pack",
   "bin": {
@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "mocha ./test/test.js",
-    "examples":"cd examples"
+    "examples": "cd examples"
   },
   "author": "",
   "license": "ISC",
