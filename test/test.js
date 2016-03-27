@@ -35,6 +35,14 @@ describe('SharedPack', function() {
 			});
 		});
 
+		describe('getMethods()', function(){
+			it('should work correctly', function(){
+
+				
+
+			});
+		});
+
 	});
 
 	describe('API', function() {
@@ -70,9 +78,36 @@ describe('SharedPack', function() {
 				});
 
 			});
+		});
+		describe.only('class based module', function() {
+
+			var rawModule;
+			var expectedAngularModule;
+
+			beforeEach(function() {
+				rawModule = require('./data/class-module.js');
+				expectedAngularModule = fs.readFileSync(path.resolve(__dirname,'./data/class-module.angular-expected.js'), {
+					encoding: 'utf8'
+				});
+			});
+
+			describe('generateAngularModuleFromFilename()', function() {
+				it('should be compiled corrcetly for angular.js platform', function() {
+
+					// var rawModuleAsString;
+					var angularModule;
+
+					angularModule = SharedPack.generateAngularModuleFromFilename(path.resolve(__dirname, './data/class-module.js'));
+
+					expect(angularModule.replace(/((\n)|(\t))+/gi, ' ').trim()).to.be.equal(expectedAngularModule.replace(/((\n)|(\t))+/gi, ' ').trim());
 
 
 
+					// console.log('rawModule', rawModule.toString());
+
+				});
+
+			});
 		});
 
 	});

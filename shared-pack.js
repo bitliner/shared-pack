@@ -28,17 +28,23 @@ function getParamNames(func) {
 }
 
 function getMethods(obj, constructorName) {
-	var result = [];
-	for (var id in obj) {
-		try {
-			if (typeof(obj[id]) == 'function') {
-				result.push('this' + '.' + id + ' = ' + obj[id].toString() + ';');
-			}
-		} catch (err) {
 
-		}
-	}
-	return result;
+	return Object.keys(obj).map(function(methodName){
+		return constructorName+'.prototype.'+methodName+' = '+obj[methodName].toString()+';';
+	});
+
+	//return obj.toString();
+	// var result = [];
+	// for (var id in obj) {
+	// 	try {
+	// 		if (typeof(obj[id]) == 'function') {
+	// 			result.push('this' + '.' + id + ' = ' + obj[id].toString() + ';');
+	// 		}
+	// 	} catch (err) {
+
+	// 	}
+	// }
+	// return result;
 }
 
 function generateFiles(opts, cb) {
