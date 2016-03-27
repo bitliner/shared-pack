@@ -79,7 +79,7 @@ describe('SharedPack', function() {
 
 			});
 		});
-		describe.only('class based module', function() {
+		describe('class based module', function() {
 
 			var rawModule;
 			var expectedAngularModule;
