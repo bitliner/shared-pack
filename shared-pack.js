@@ -126,15 +126,15 @@ var parseNodeModuleString = module.exports.parseNodeModuleString = function pars
 	opts = opts || {};
 	filename = opts.filename || null;
 	//console.log('opts.filename',opts.filename)
-	filename = path.resolve(__dirname, filename);
+	//filename = path.resolve(__dirname, filename);
 
 	// input
 	moduleName = filename;
 
 	// output
-	packageName = moduleName.split('/');
-	packageName = packageName[packageName.length - 1].split('.js')[0];
-	//packageName = moduleName.replace(/^\.\//gi, '').split('.js')[0];
+	//packageName = moduleName.split('/');
+	//packageName = packageName[packageName.length - 1].split('.js')[0];
+	packageName = moduleName.replace(/\.\/([^\/]+\/)*/gi, '').split('.js')[0];
 	moduleToCompile = require(filename);
 	constructorName = moduleToCompile.prototype.constructor.name;
 	methods = getMethods(moduleToCompile.prototype, constructorName);
@@ -143,13 +143,13 @@ var parseNodeModuleString = module.exports.parseNodeModuleString = function pars
 	depsToString = deps.map(function(dep) {
 		return '\'' + dep + '\'';
 	}).toString();
-	Logger.info('>>', moduleToCompile.toString());
+	//Logger.writeln('>>', packageName);
 	code = moduleToCompile.toString() + '\n\n' + methods.join('\n\n');
 
 
 
 	result = {
-		name: constructorName,
+		name: packageName,
 		depsToString: depsToString,
 		deps: deps,
 		code: code,
@@ -189,8 +189,10 @@ module.exports.run = function(opts, cb) {
 		}
 	});
 
+	console.log('packageName',packageName,parsedModule.name)
+
 	generateFiles({
-		packageName: packageName,
+		packageName: parsedModule.name,
 		nodeTemplateCompiled: nodeTemplateCompiled,
 		angularTemplateCompiled: angularTemplateCompiled
 	}, function(err) {

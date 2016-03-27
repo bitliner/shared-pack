@@ -3,5 +3,5 @@
 <%= package.code %>
 
 
-angular.module('<%= package.name %>', [<%= package.depsToString %>])
-	.factory('<%= package.name %>', [<%= package.depsToString %><% if (package.deps && package.deps.length) { %>, <% } %><%= package.name %>]);
+angular.module('<%= package.constructorName %>', [<%= package.depsToString %>])
+	.factory('<%= package.constructorName %>', [<%= package.depsToString %><% if (package.deps && package.deps.length) { %>, <% } %><%= package.constructorName %>]);

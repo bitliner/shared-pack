@@ -6,8 +6,11 @@ var SharedPack = require('../');
 var Logger = new(require('grunt-legacy-log').Log)();
 var path = require('path');
 
+//console.log('??',path.resolve(__filename, process.argv[2]))
+
 SharedPack.run({
-	filename: path.resolve(__dirname, process.argv[2])
+	//filename: path.resolve(__dirname, process.argv[2])
+	filename: process.argv[2]
 }, function(err) {
 	if (err) {
 		console.log('Error', err);
