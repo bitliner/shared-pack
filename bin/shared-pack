@@ -5,12 +5,21 @@
 var SharedPack = require('../');
 var Logger = new(require('grunt-legacy-log').Log)();
 var path = require('path');
+var fs=require('fs');
 
-//console.log('??',path.resolve(__filename, process.argv[2]))
+var lib  = path.join(path.dirname(fs.realpathSync(__filename)), '../lib');
+
+
+// console.log('??',path.resolve(__dirname, process.argv[2]))
+// console.log('lib',process.cwd());
+
+var filename=path.resolve(process.cwd(),process.argv[2]);
+
+//console.log('filename',filename)
 
 SharedPack.run({
 	//filename: path.resolve(__dirname, process.argv[2])
-	filename: process.argv[2]
+	filename: filename
 }, function(err) {
 	if (err) {
 		console.log('Error', err);

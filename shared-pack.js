@@ -7,7 +7,6 @@ var async = require('async');
 var path = require('path');
 var Logger = new(require('grunt-legacy-log').Log)();
 var beautify = require('js-beautify').js_beautify;
-var paramCase = require('param-case');
 
 var angularTemplateString = fs.readFileSync(path.resolve(__dirname, './templates/angular-template.ejs'), {
 	encoding: 'utf8'
@@ -72,6 +71,8 @@ function generateFiles(opts, cb) {
 			return fs.mkdir(buildFolder, next);
 		},
 		function(next) {
+			console.log('buildFolder',buildFolder)
+			console.log('packageName',packageName)
 			var filename = buildFolder + '/' + packageName + '.angular.js';
 			Logger.writeln('Creating file: ' + filename);
 			fs.writeFile(filename, beautify(angularTemplateCompiled, {
@@ -134,7 +135,9 @@ var parseNodeModuleString = module.exports.parseNodeModuleString = function pars
 	// output
 	//packageName = moduleName.split('/');
 	//packageName = packageName[packageName.length - 1].split('.js')[0];
-	packageName = moduleName.replace(/\.\/([^\/]+\/)*/gi, '').split('.js')[0];
+	packageName = moduleName.replace(/\/([^\/]+\/)*/gi, '').split('.js')[0];
+	console.log('packageName',packageName)
+	console.log('filename',filename);
 	moduleToCompile = require(filename);
 	constructorName = moduleToCompile.prototype.constructor.name;
 	methods = getMethods(moduleToCompile.prototype, constructorName);
@@ -189,7 +192,7 @@ module.exports.run = function(opts, cb) {
 		}
 	});
 
-	console.log('packageName',packageName,parsedModule.name)
+	//console.log('packageName',packageName,parsedModule.name)
 
 	generateFiles({
 		packageName: parsedModule.name,

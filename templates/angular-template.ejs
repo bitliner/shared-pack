@@ -4,4 +4,4 @@
 
 
 angular.module('<%= package.constructorName %>', [<%= package.depsToString %>])
-	.factory('<%= package.constructorName %>', [<%= package.depsToString %><% if (package.deps && package.deps.length) { %>, <% } %><%= package.constructorName %>]);
+	.service('<%= package.constructorName %>', [<%= package.depsToString %><% if (package.deps && package.deps.length) { %>, <% } %><%= package.constructorName %>]);
