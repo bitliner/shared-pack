@@ -90,13 +90,6 @@ The results fo compilation will be a foldr `./build` containing 2 files
 	...
 ```
 
-**package.json**
-
-```
-	...
-	"main":"./build/shared-service.node.js",
-	...
-```
 
 # Roadmap
 
