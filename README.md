@@ -77,15 +77,7 @@ The results fo compilation will be a foldr `./build` containing 2 files
 		.factory('SharedService', ['param1', SharedService]);
 	```
 
-* `./build/shared-service.node.js`
 
-	```
-	function SharedService(param1) {
-		console.log('Ola', param1);
-	}
-
-	 module.exports = SharedService(require('param1.js'));
-	```
 
 <a name="setMain"></a>
 ## Configure properly `main` field in bower.json and package.json
