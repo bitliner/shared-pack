@@ -1,6 +1,8 @@
 # shared-pack
 
-Write code in node.js, and use it on node.js or angular.js platforms.
+Write code in [NodeJS](https://nodejs.org/en/)/[NPM](https://www.npmjs.com/), compile it for [AngularJS](https://angularjs.org/)/[bower](https://bower.io/).
+
+
 
 <img src="./docs/usage.gif"/>
 
@@ -106,7 +108,8 @@ The results fo compilation will be a foldr `./build` containing 2 files
 
 # Roadmap
 
-1. Add support for private npm packages
+* Add support for semantic versioning of bower: `shared-pack ./node-file.js patch|minor|major` changes field "version" in bower.json.
+* Add support for private npm packages
 
 
 
