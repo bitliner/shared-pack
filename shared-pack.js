@@ -70,19 +70,12 @@ function generateFiles(opts, cb) {
 			Logger.writeln('Creating folder: ' + buildFolder);
 			return fs.mkdir(buildFolder, next);
 		},
-		function(next) {
+		function compileToAngular(next) {
 			console.log('buildFolder',buildFolder)
 			console.log('packageName',packageName)
 			var filename = buildFolder + '/' + packageName + '.angular.js';
 			Logger.writeln('Creating file: ' + filename);
 			fs.writeFile(filename, beautify(angularTemplateCompiled, {
-				indent_size: 4
-			}), 'utf8', next);
-		},
-		function(next) {
-			var filename = buildFolder + '/' + packageName + '.node.js';
-			Logger.writeln('Creating file: ' + filename);
-			fs.writeFile(filename, beautify(nodeTemplateCompiled, {
 				indent_size: 4
 			}), 'utf8', next);
 		}
