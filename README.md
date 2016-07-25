@@ -93,7 +93,9 @@ The results fo compilation will be a foldr `./build` containing 2 files
 
 # Roadmap
 
+* Remove generation of node.js file
 * Add support for semantic versioning of bower: `shared-pack ./node-file.js patch|minor|major` changes field "version" in bower.json.
+* add support for updating bower.json dependencies based on modules installed via npm
 * Add support for private npm packages
 
 
