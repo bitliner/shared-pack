@@ -94,6 +94,9 @@ The results fo compilation will be a foldr `./build` containing 2 files
 # Roadmap
 
 * Remove generation of node.js file
+* Create a parser module with following functions:
+  * getDependenciesNames(moduleString) // extract require instructions, removing eventually user prefix
+  * other methods ...
 * Fix compilation for AngularJS: the node exported object should be in a wrapping function, depednencies should be delcared in the wrapping function, and the wrapping function should return the exported object
 * Add support for semantic versioning of bower: `shared-pack ./node-file.js patch|minor|major` changes field "version" in bower.json.
 * add support for updating bower.json dependencies based on modules installed via npm
