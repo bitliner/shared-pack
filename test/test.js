@@ -7,6 +7,32 @@ var SharedPack = require('../');
 
 describe('SharedPack', function() {
 
+	describe.only('Parser', function() {
+		var moduleAsString;
+		var Parser;
+
+		beforeEach(function() {
+			moduleAsString = [
+				'var bunyan = require(\'bunyan\')',
+				'path = require(\'path\');',
+				'function(){console.log(\'Hello\'); }'
+			].join('\n');
+			Parser=require('../lib/parser');
+		});
+
+
+		describe('getDependencies()', function(){
+			it('should work fine', function(){
+				var result;
+
+				result=Parser.getDependencies(moduleAsString);
+				expect(result.length).to.be.eql(2);
+				expect(result).to.eql(['bunyan','path']);
+			});
+		});
+
+	});
+
 	describe('Implementation', function() {
 
 		describe('parseNodeModuleString()', function() {
@@ -35,10 +61,10 @@ describe('SharedPack', function() {
 			});
 		});
 
-		describe('getMethods()', function(){
-			it('should work correctly', function(){
+		describe('getMethods()', function() {
+			it('should work correctly', function() {
 
-				
+
 
 			});
 		});
@@ -56,7 +82,7 @@ describe('SharedPack', function() {
 
 			beforeEach(function() {
 				rawModule = require('./data/simple-module.js');
-				expectedAngularModule = fs.readFileSync(path.resolve(__dirname,'./data/simple-module.angular-expected.js'), {
+				expectedAngularModule = fs.readFileSync(path.resolve(__dirname, './data/simple-module.angular-expected.js'), {
 					encoding: 'utf8'
 				});
 			});
@@ -86,7 +112,7 @@ describe('SharedPack', function() {
 
 			beforeEach(function() {
 				rawModule = require('./data/class-module.js');
-				expectedAngularModule = fs.readFileSync(path.resolve(__dirname,'./data/class-module.angular-expected.js'), {
+				expectedAngularModule = fs.readFileSync(path.resolve(__dirname, './data/class-module.angular-expected.js'), {
 					encoding: 'utf8'
 				});
 			});
